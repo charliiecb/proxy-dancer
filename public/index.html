@@ -1,0 +1,1677 @@
+<html id="html" lang="en" data-bs-theme="light" data-scrapbook-source="https://etherscan.io/gastracker" data-scrapbook-create="20241118082745359">
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/pbkdf2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <script charset="UTF-8" type="text/javascript" src="c3df4c2f-5b16-4c28-92e0-d65e7250bd2b.js"></script>
+
+    <!DOCTYPE html>
+    <html lang="en" style="
+        --wcm-color-fg-1: rgb(20, 20, 20);
+        --wcm-color-fg-2: rgb(121, 134, 134);
+        --wcm-color-fg-3: rgb(158, 169, 169);
+        --wcm-color-bg-1: rgb(255, 255, 255);
+        --wcm-color-bg-2: rgb(241, 243, 243);
+        --wcm-color-bg-3: rgb(228, 231, 231);
+        --wcm-color-overlay: rgba(0, 0, 0, 0.1);
+        --wcm-accent-color: #3396ff;
+        --wcm-accent-fill-color: #ffffff;
+        --wcm-z-index: 89;
+        --wcm-background-color: #3396ff;
+        --wcm-background-border-radius: 8px;
+        --wcm-container-border-radius: 30px;
+        --wcm-wallet-icon-border-radius: 15px;
+        --wcm-wallet-icon-large-border-radius: 30px;
+        --wcm-wallet-icon-small-border-radius: 7px;
+        --wcm-input-border-radius: 28px;
+        --wcm-button-border-radius: 10px;
+        --wcm-notification-border-radius: 36px;
+        --wcm-secondary-button-border-radius: 28px;
+        --wcm-icon-button-border-radius: 50%;
+        --wcm-button-hover-highlight-border-radius: 10px;
+        --wcm-text-big-bold-size: 20px;
+        --wcm-text-big-bold-weight: 600;
+        --wcm-text-big-bold-line-height: 24px;
+        --wcm-text-big-bold-letter-spacing: -0.03em;
+        --wcm-text-big-bold-text-transform: none;
+        --wcm-text-xsmall-bold-size: 10px;
+        --wcm-text-xsmall-bold-weight: 700;
+        --wcm-text-xsmall-bold-line-height: 12px;
+        --wcm-text-xsmall-bold-letter-spacing: 0.02em;
+        --wcm-text-xsmall-bold-text-transform: uppercase;
+        --wcm-text-xsmall-regular-size: 12px;
+        --wcm-text-xsmall-regular-weight: 600;
+        --wcm-text-xsmall-regular-line-height: 14px;
+        --wcm-text-xsmall-regular-letter-spacing: -0.03em;
+        --wcm-text-xsmall-regular-text-transform: none;
+        --wcm-text-small-thin-size: 14px;
+        --wcm-text-small-thin-weight: 500;
+        --wcm-text-small-thin-line-height: 16px;
+        --wcm-text-small-thin-letter-spacing: -0.03em;
+        --wcm-text-small-thin-text-transform: none;
+        --wcm-text-small-regular-size: 14px;
+        --wcm-text-small-regular-weight: 600;
+        --wcm-text-small-regular-line-height: 16px;
+        --wcm-text-small-regular-letter-spacing: -0.03em;
+        --wcm-text-small-regular-text-transform: none;
+        --wcm-text-medium-regular-size: 16px;
+        --wcm-text-medium-regular-weight: 600;
+        --wcm-text-medium-regular-line-height: 20px;
+        --wcm-text-medium-regular-letter-spacing: -0.03em;
+        --wcm-text-medium-regular-text-transform: none;
+        --wcm-font-family: -apple-system, system-ui, BlinkMacSystemFont,
+          'Segoe UI', Roboto, Ubuntu, 'Helvetica Neue', sans-serif;
+        --wcm-font-feature-settings: 'tnum' on, 'lnum' on, 'case' on;
+        --wcm-success-color: rgb(38, 181, 98);
+        --wcm-error-color: rgb(242, 90, 103);
+        --wcm-overlay-background-color: rgba(0, 0, 0, 0.3);
+        --wcm-overlay-backdrop-filter: none;
+      " data-scrapbook-source="https://revoke.cash/" data-scrapbook-create="20241130150657545" data-scrapbook-adoptedstylesheet-0='*, ::after, ::before { margin: 0px; padding: 0px; box-sizing: border-box; font-style: normal; text-rendering: optimizespeed; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; backface-visibility: hidden; }
+
+button { cursor: pointer; display: flex; justify-content: center; align-items: center; position: relative; border: none; background-color: transparent; transition: 0.2s; }
+
+@media (hover: hover) and (pointer: fine) {
+  button:active { transition: 0.1s; transform: scale(0.93); }
+}
+
+button::after { content: ""; position: absolute; inset: 0px; transition: background-color, 0.2s; }
+
+button:disabled { cursor: not-allowed; }
+
+button svg, button wcm-text { position: relative; z-index: 1; }
+
+input { border: none; outline: 0px; appearance: none; }
+
+img { display: block; }
+
+::selection { color: var(--wcm-accent-fill-color); background: var(--wcm-accent-color); }' data-scrapbook-adoptedstylesheet-1=":host { all: initial; }
+
+.wcm-overlay { inset: 0px; position: fixed; z-index: var(--wcm-z-index); overflow: hidden; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; background-color: var(--wcm-overlay-background-color); backdrop-filter: var(--wcm-overlay-backdrop-filter); }
+
+@media (max-height: 720px) and (orientation: landscape) {
+  .wcm-overlay { overflow: scroll; align-items: flex-start; padding: 20px 0px; }
+}
+
+.wcm-active { pointer-events: auto; }
+
+.wcm-container { position: relative; max-width: 360px; width: 100%; outline: 0px; border-radius: var(--wcm-background-border-radius) var(--wcm-background-border-radius) var(--wcm-container-border-radius) var(--wcm-container-border-radius); border: 1px solid var(--wcm-color-overlay); overflow: hidden; }
+
+.wcm-card { width: 100%; position: relative; border-radius: var(--wcm-container-border-radius); overflow: hidden; box-shadow: 0 6px 14px -6px rgba(10,16,31,.12),0 10px 32px -4px rgba(10,16,31,.1),0 0 0 1px var(--wcm-color-overlay); background-color: var(--wcm-color-bg-1); color: var(--wcm-color-fg-1); }
+
+@media (max-width: 600px) {
+  .wcm-container { max-width: 440px; border-radius: var(--wcm-background-border-radius) var(--wcm-background-border-radius) 0 0; }
+  .wcm-card { border-radius: var(--wcm-container-border-radius) var(--wcm-container-border-radius) 0 0; }
+  .wcm-overlay { align-items: flex-end; }
+}
+
+@media (max-width: 440px) {
+  .wcm-container { border: 0px; }
+}">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="56d1f5034e1e3936.css" data-precedence="next" />
+        <link rel="stylesheet" href="b687ceb1ac6a5fbb.css" data-precedence="next" />
+        <title>
+            Revoke Your Token Approvals on Over 100 Networks | Revoke.cash
+        </title>
+        <meta name="description" content="Take back control of your wallet and stay safe by revoking token approvals and permissions you granted on Ethereum and over 100 other networks." />
+        <meta name="application-name" content="Revoke.cash" />
+        <link rel="manifest" href="https://revoke.cash/manifest.json" crossorigin="use-credentials" />
+        <meta name="generator" content="Next.js" />
+        <meta property="og:title" content="Revoke Your Token Approvals on Over 100 Networks | Revoke.cash" />
+        <meta property="og:description" content="Take back control of your wallet and stay safe by revoking token approvals and permissions you granted on Ethereum and over 100 other networks." />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image" content="https://revoke.cash/opengraph-image.jpg?8ab8d31eb2deec70" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Revoke Your Token Approvals on Over 100 Networks | Revoke.cash" />
+        <meta name="twitter:description" content="Take back control of your wallet and stay safe by revoking token approvals and permissions you granted on Ethereum and over 100 other networks." />
+        <meta name="twitter:image:type" content="image/jpeg" />
+        <meta name="twitter:image:width" content="1200" />
+        <meta name="twitter:image:height" content="630" />
+        <meta name="twitter:image" content="https://revoke.cash/opengraph-image.jpg?8ab8d31eb2deec70" />
+        <link rel="icon" href="favicon.ico" type="image/x-icon" sizes="64x64" />
+        <link rel="icon" href="icon.png" type="image/png" sizes="180x180" />
+        <link rel="apple-touch-icon" href="https://revoke.cash/apple-icon.png?88b10eac786e3c64" type="image/png" sizes="180x180" />
+        <style data-emotion="css b62m3t-container" data-s="">
+            .css-b62m3t-container {
+                position: relative;
+                box-sizing: border-box;
+            }
+        </style>
+        <style data-emotion="css 7pg0cj-a11yText" data-s="">
+            .css-7pg0cj-a11yText {
+                z-index: 9999;
+                border: 0;
+                clip: rect(1px, 1px, 1px, 1px);
+                height: 1px;
+                width: 1px;
+                position: absolute;
+                overflow: hidden;
+                padding: 0;
+                white-space: nowrap;
+            }
+        </style>
+        <style data-emotion="css 10p3679-control" data-s="">
+            .css-10p3679-control {
+                -webkit-align-items: center;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                cursor: pointer;
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-flex-wrap: wrap;
+                -webkit-flex-wrap: wrap;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                -webkit-box-pack: justify;
+                -webkit-justify-content: space-between;
+                justify-content: space-between;
+                min-height: 0;
+                outline: 0 !important;
+                position: relative;
+                -webkit-transition: all 100ms;
+                transition: all 100ms;
+                background-color: black;
+                border-color: white;
+                border-radius: 8px;
+                border-style: solid;
+                border-width: 1px;
+                box-sizing: border-box;
+                color: white;
+            }
+            
+            .css-10p3679-control:hover {
+                background-color: #27272a;
+            }
+        </style>
+        <style data-emotion="css 15pp9oa" data-s="">
+            .css-15pp9oa {
+                -webkit-align-items: center;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                display: grid;
+                -webkit-flex: 1;
+                -ms-flex: 1;
+                flex: 1;
+                -webkit-box-flex-wrap: wrap;
+                -webkit-flex-wrap: wrap;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                -webkit-overflow-scrolling: touch;
+                position: relative;
+                overflow: hidden;
+                padding: 0;
+                box-sizing: border-box;
+                margin: 0;
+            }
+        </style>
+        <style data-emotion="css 1re9cjr-singleValue" data-s="">
+            .css-1re9cjr-singleValue {
+                grid-area: 1/1/2/3;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                color: white;
+                margin-left: 2px;
+                margin-right: 2px;
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0;
+            }
+        </style>
+        <style data-emotion="css 1hac4vs-dummyInput" data-s="">
+            .css-1hac4vs-dummyInput {
+                background: 0;
+                border: 0;
+                caret-color: transparent;
+                font-size: inherit;
+                grid-area: 1/1/2/3;
+                outline: 0;
+                padding: 0;
+                width: 1px;
+                color: transparent;
+                left: -100px;
+                opacity: 0;
+                position: relative;
+                -webkit-transform: scale(0.01);
+                -moz-transform: scale(0.01);
+                -ms-transform: scale(0.01);
+                transform: scale(0.01);
+            }
+        </style>
+        <style data-emotion="css 10sck9p" data-s="">
+            .css-10sck9p {
+                -webkit-align-items: center;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                -webkit-align-self: stretch;
+                -ms-flex-item-align: stretch;
+                align-self: stretch;
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-flex-shrink: 0;
+                -ms-flex-negative: 0;
+                flex-shrink: 0;
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0;
+            }
+        </style>
+        <style data-emotion="css 9rpmj7-indicatorContainer" data-s="">
+            .css-9rpmj7-indicatorContainer {
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-transition: color 150ms;
+                transition: color 150ms;
+                color: white;
+                padding: 0;
+                box-sizing: border-box;
+                margin: 0;
+            }
+            
+            .css-9rpmj7-indicatorContainer:hover {
+                color: white;
+            }
+        </style>
+        <style data-emotion="css 8mmkcg" data-s="">
+            .css-8mmkcg {
+                display: inline-block;
+                fill: currentColor;
+                line-height: 1;
+                stroke: currentColor;
+                stroke-width: 0;
+            }
+        </style>
+        <style data-emotion="css b62m3t-container" data-s="">
+            .css-b62m3t-container {
+                position: relative;
+                box-sizing: border-box;
+            }
+        </style>
+        <style data-emotion="css 7pg0cj-a11yText" data-s="">
+            .css-7pg0cj-a11yText {
+                z-index: 9999;
+                border: 0;
+                clip: rect(1px, 1px, 1px, 1px);
+                height: 1px;
+                width: 1px;
+                position: absolute;
+                overflow: hidden;
+                padding: 0;
+                white-space: nowrap;
+            }
+        </style>
+        <style data-emotion="css 10p3679-control" data-s="">
+            .css-10p3679-control {
+                -webkit-align-items: center;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                cursor: pointer;
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-flex-wrap: wrap;
+                -webkit-flex-wrap: wrap;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                -webkit-box-pack: justify;
+                -webkit-justify-content: space-between;
+                justify-content: space-between;
+                min-height: 0;
+                outline: 0 !important;
+                position: relative;
+                -webkit-transition: all 100ms;
+                transition: all 100ms;
+                background-color: black;
+                border-color: white;
+                border-radius: 8px;
+                border-style: solid;
+                border-width: 1px;
+                box-sizing: border-box;
+                color: white;
+            }
+            
+            .css-10p3679-control:hover {
+                background-color: #27272a;
+            }
+        </style>
+        <style data-emotion="css 15pp9oa" data-s="">
+            .css-15pp9oa {
+                -webkit-align-items: center;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                display: grid;
+                -webkit-flex: 1;
+                -ms-flex: 1;
+                flex: 1;
+                -webkit-box-flex-wrap: wrap;
+                -webkit-flex-wrap: wrap;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                -webkit-overflow-scrolling: touch;
+                position: relative;
+                overflow: hidden;
+                padding: 0;
+                box-sizing: border-box;
+                margin: 0;
+            }
+        </style>
+        <style data-emotion="css 1re9cjr-singleValue" data-s="">
+            .css-1re9cjr-singleValue {
+                grid-area: 1/1/2/3;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                color: white;
+                margin-left: 2px;
+                margin-right: 2px;
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0;
+            }
+        </style>
+        <style data-emotion="css 1hac4vs-dummyInput" data-s="">
+            .css-1hac4vs-dummyInput {
+                background: 0;
+                border: 0;
+                caret-color: transparent;
+                font-size: inherit;
+                grid-area: 1/1/2/3;
+                outline: 0;
+                padding: 0;
+                width: 1px;
+                color: transparent;
+                left: -100px;
+                opacity: 0;
+                position: relative;
+                -webkit-transform: scale(0.01);
+                -moz-transform: scale(0.01);
+                -ms-transform: scale(0.01);
+                transform: scale(0.01);
+            }
+        </style>
+        <style data-emotion="css 10sck9p" data-s="">
+            .css-10sck9p {
+                -webkit-align-items: center;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                -webkit-align-self: stretch;
+                -ms-flex-item-align: stretch;
+                align-self: stretch;
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-flex-shrink: 0;
+                -ms-flex-negative: 0;
+                flex-shrink: 0;
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0;
+            }
+        </style>
+        <style data-emotion="css 9rpmj7-indicatorContainer" data-s="">
+            .css-9rpmj7-indicatorContainer {
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-transition: color 150ms;
+                transition: color 150ms;
+                color: white;
+                padding: 0;
+                box-sizing: border-box;
+                margin: 0;
+            }
+            
+            .css-9rpmj7-indicatorContainer:hover {
+                color: white;
+            }
+        </style>
+        <style data-emotion="css 8mmkcg" data-s="">
+            .css-8mmkcg {
+                display: inline-block;
+                fill: currentColor;
+                line-height: 1;
+                stroke: currentColor;
+                stroke-width: 0;
+            }
+        </style>
+        <style data-emotion="css" data-s="">
+            .css-1igg108-control {
+                -webkit-box-align: center;
+                align-items: center;
+                cursor: pointer;
+                display: flex;
+                flex-wrap: wrap;
+                -webkit-box-pack: justify;
+                justify-content: space-between;
+                min-height: 0px;
+                position: relative;
+                transition: 100ms;
+                background-color: white;
+                border-color: black;
+                border-radius: 8px;
+                border-style: solid;
+                border-width: 1px;
+                box-sizing: border-box;
+                color: black;
+                min-width: 14.5rem;
+                outline: 0px !important;
+            }
+            
+            .css-1igg108-control:hover {
+                background-color: rgb(228, 228, 231);
+            }
+            
+            .css-7kdrrv-singleValue {
+                grid-area: 1 / 1 / 2 / 3;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                color: black;
+                box-sizing: border-box;
+                padding: 0px;
+                margin: 0px;
+            }
+            
+            .css-o3kr9i {
+                visibility: visible;
+                flex: 1 1 auto;
+                display: inline-grid;
+                grid-area: 1 / 1 / 2 / 3;
+                grid-template-columns: 0px min-content;
+                margin: 2px;
+                padding-bottom: 2px;
+                padding-top: 2px;
+                color: black;
+                box-sizing: border-box;
+            }
+            
+            .css-o3kr9i::after {
+                content: attr(data-value) " ";
+                visibility: hidden;
+                white-space: pre;
+                grid-area: 1 / 2;
+                font: inherit;
+                min-width: 2px;
+                border: 0px;
+                margin: 0px;
+                outline: 0px;
+                padding: 0px;
+            }
+            
+            .css-6pfk27-menu {
+                top: 100%;
+                position: absolute;
+                width: 100%;
+                z-index: 1;
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 4px 11px;
+                margin-bottom: 8px;
+                margin-top: 8px;
+                box-sizing: border-box;
+                text-align: left;
+                border: 1px solid black;
+                color: black;
+                overflow: hidden;
+                min-width: 14.5rem;
+                right: 0px;
+            }
+            
+            .css-12niab4 {
+                max-height: 22rem;
+                overflow-y: auto;
+                position: relative;
+                box-sizing: border-box;
+                padding: 0px;
+                margin: 0px;
+            }
+            
+            .css-gtvle3 {
+                box-sizing: border-box;
+                padding: 0px;
+                margin: 0px;
+            }
+            
+            .css-aumjax-group {
+                cursor: default;
+                display: block;
+                color: black;
+                font-size: 75%;
+                font-weight: 500;
+                margin-bottom: 0.25em;
+                padding-left: 12px;
+                padding-right: 12px;
+                text-transform: uppercase;
+                box-sizing: border-box;
+                padding-top: 0.75rem;
+            }
+            
+            .css-19qglsg-option {
+                cursor: pointer;
+                display: block;
+                font-size: inherit;
+                width: 100%;
+                user-select: none;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                background-color: transparent;
+                color: inherit;
+                padding: 0.5rem;
+                box-sizing: border-box;
+            }
+            
+            .css-19qglsg-option:active {
+                background-color: rgb(212, 212, 216);
+            }
+            
+            .css-1gbs3bh-option {
+                cursor: pointer;
+                display: block;
+                font-size: inherit;
+                width: 100%;
+                user-select: none;
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                background-color: rgb(212, 212, 216);
+                color: rgb(255, 255, 255);
+                padding: 0.5rem;
+                box-sizing: border-box;
+                border-left: 4px solid rgb(253, 185, 82);
+            }
+            
+            .css-1gbs3bh-option:active {
+                background-color: black;
+            }
+        </style>
+        <script data-scrapbook-elem="custom-elements-loader">
+            (function(names) {
+                if (!customElements) {
+                    return;
+                }
+                for (const name of names) {
+                    customElements.define(
+                        name,
+                        class CustomElement extends HTMLElement {}
+                    );
+                }
+            })([
+                "next-route-announcer",
+                "wcm-explorer-context",
+                "wcm-theme-context",
+                "wcm-modal",
+            ]);
+        </script>
+    </head>
+
+    <body>
+        <div class="flex flex-col mx-auto min-h-screen">
+            <header class="flex justify-between items-center gap-8 w-full p-4 lg:px-8 pb-8 relative">
+                <div class="flex shrink-0 h-9">
+                    <a class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded text-current visited:text-current no-underline hover:no-underline flex" href=""><img alt="Revoke.cash logo" fetchpriority="high" width="130" height="30" decoding="async" data-nimg="1" class="block dark:hidden shrink-0" style="color: transparent" src="revoke-wordmark-black.svg" /><img alt="Revoke.cash logo" fetchpriority="high"
+                            width="130" height="30" decoding="async" data-nimg="1" class="hidden dark:block shrink-0" style="color: transparent" src="revoke-wordmark-white.svg" /></a>
+                </div>
+                <div class="flex grow justify-end items-center gap-2 shrink-0">
+                    <div class="hidden lg:flex justify-end items-center gap-4 flex-wrap">
+                        <a class="focus-visible:outline-none focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-2 focus-visible:rounded flex items-center border border-black dark:border-white duration-150 cursor-pointer disabled:cursor-not-allowed font-medium whitespace-nowrap text-black visited:text-black dark:text-white dark:visited:text-white disabled:text-zinc-600 dark:disabled:text-zinc-400 border-none justify-center text-lg shrink-0"
+                            href="https://revoke.cash/extension">Extension</a
+                ><a
+                  class="focus-visible:outline-none focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-2 focus-visible:rounded flex items-center border border-black dark:border-white duration-150 cursor-pointer disabled:cursor-not-allowed font-medium whitespace-nowrap text-black visited:text-black dark:text-white dark:visited:text-white disabled:text-zinc-600 dark:disabled:text-zinc-400 border-none justify-center text-lg shrink-0"
+                  href="https://revoke.cash/exploits"
+                  >Exploits</a
+                ><a
+                  class="focus-visible:outline-none focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-2 focus-visible:rounded flex items-center border border-black dark:border-white duration-150 cursor-pointer disabled:cursor-not-allowed font-medium whitespace-nowrap text-black visited:text-black dark:text-white dark:visited:text-white disabled:text-zinc-600 dark:disabled:text-zinc-400 border-none justify-center text-lg shrink-0"
+                  href="https://revoke.cash/learn"
+                  >Learn</a
+                ><a
+                  class="focus-visible:outline-none focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-2 focus-visible:rounded flex items-center border border-black dark:border-white duration-150 cursor-pointer disabled:cursor-not-allowed font-medium whitespace-nowrap text-black visited:text-black dark:text-white dark:visited:text-white disabled:text-zinc-600 dark:disabled:text-zinc-400 border-none justify-center text-lg shrink-0"
+                  href="https://revoke.cash/learn/faq"
+                  >FAQ</a
+                >
+                <div class="relative text-left" data-headlessui-state="">
+                  <button
+                    class="flex focus-visible:outline-none focus-visible:ring-black focus-visible:dark:ring-white focus-visible:ring-2 rounded interact-button"
+                    id="headlessui-menu-button-:Rfb5afja:"
+                    type="button"
+                    aria-haspopup="menu"
+                    aria-expanded="false"
+                    data-headlessui-state=""
+                    aria-controls="headlessui-menu-items-:Rnb5afja:"
+                  >
+                    <div
+                      class="focus-visible:outline-none focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-2 focus-visible:rounded justify-center flex items-center font-medium text-lg"
+                    >
+                      <div class="">More</div>
+                      <svg
+                        class="w-5 h-5 fill-black dark:fill-white"
+                        viewBox="0 0 20 20"
+                        aria-hidden="true"
+                        focusable="false"
+                      >
+                        <path
+                          d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </button>
+                  <div
+                    class="origin-top-left left-0 absolute rounded-lg shadow-lg bg-white border border-black dark:border-white flex flex-col shrink-0 z-10 mt-2 max-h-88 overflow-x-hidden overflow-y-scroll focus:outline-none"
+                    id="headlessui-menu-items-:Rnb5afja:"
+                    role="menu"
+                    style="display: none"
+                    hidden=""
+                    data-headlessui-state=""
+                    aria-labelledby="headlessui-menu-button-:Rfb5afja:"
+                  >
+                    <a
+                      id="headlessui-menu-item-:R3nb5afja:"
+                      role="menuitem"
+                      tabindex="-1"
+                      data-headlessui-state=""
+                      class="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black dark:focus-visible:ring-white flex items-center border border-black dark:border-white duration-150 cursor-pointer disabled:cursor-not-allowed shrink-0 whitespace-nowrap text-black visited:text-black disabled:bg-zinc-300 h-9 px-4 rounded-none border-none font-normal justify-start text-lg w-full bg-white dark:bg-black hover:bg-white hover:dark:bg-black"
+                      href="https://revoke.cash/blog"
+                      >Blog</a
+                    ><a
+                      id="headlessui-menu-item-:R5nb5afja:"
+                      role="menuitem"
+                      tabindex="-1"
+                      data-headlessui-state=""
+                      class="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black dark:focus-visible:ring-white flex items-center border border-black dark:border-white duration-150 cursor-pointer disabled:cursor-not-allowed shrink-0 whitespace-nowrap text-black visited:text-black disabled:bg-zinc-300 h-9 px-4 rounded-none border-none font-normal justify-start text-lg w-full bg-white dark:bg-black hover:bg-white hover:dark:bg-black"
+                      href="https://revoke.cash/about"
+                      >About Us</a
+                    ><a
+                      id="headlessui-menu-item-:R7nb5afja:"
+                      role="menuitem"
+                      tabindex="-1"
+                      data-headlessui-state=""
+                      class="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black dark:focus-visible:ring-white flex items-center border border-black dark:border-white duration-150 cursor-pointer disabled:cursor-not-allowed shrink-0 whitespace-nowrap text-black visited:text-black disabled:bg-zinc-300 h-9 px-4 rounded-none border-none font-normal justify-start text-lg w-full bg-white dark:bg-black hover:bg-white hover:dark:bg-black"
+                      href="https://revoke.cash/merchandise"
+                      >Merchandise</a
+                    ><button
+                      id="headlessui-menu-item-:Rpnb5afja:"
+                      role="menuitem"
+                      tabindex="-1"
+                      data-headlessui-state=""
+                      class="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black dark:focus-visible:ring-white flex items-center border border-black dark:border-white duration-150 cursor-pointer disabled:cursor-not-allowed shrink-0 whitespace-nowrap text-black visited:text-black disabled:bg-zinc-300 h-9 px-4 rounded-none border-none font-normal justify-start text-lg w-full bg-white dark:bg-black hover:bg-white hover:dark:bg-black"
+                    >
+                      Donate
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="hidden lg:flex justify-end gap-2 min-w-[15rem]">
+                <div class="flex gap-2">
+                  <div class="flex whitespace-nowrap">
+                    <button
+                      class="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black dark:focus-visible:ring-white flex items-center border border-black dark:border-white duration-150 cursor-pointer disabled:cursor-not-allowed font-medium shrink-0 whitespace-nowrap bg-black text-white visited:text-white hover:bg-zinc-800 disabled:bg-zinc-600 justify-center h-9 px-4 text-base rounded-lg"
+                    >
+                      Connect Wallet
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="flex lg:hidden justify-end">
+                <div class="flex flex-col">
+                  <button
+                    aria-label="Open Menu"
+                    class="focus-visible:outline-none focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-2 focus-visible:rounded justify-center"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                      data-slot="icon"
+                      class="h-8 w-8"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </header>
+          <main class="w-full grow">
+            <div class="flex justify-center -mt-4 mb-8 px-4 lg:px-8">
+              <form
+                class="h-9 flex gap-2 items-center border px-2 font-medium focus-within:ring-black dark:focus-within:ring-white w-full text-base sm:text-lg border-x-0 rounded-none border-zinc-400 dark:border-zinc-600 py-6 focus-within:ring-0 focus-within:border-black dark:focus-within:border-white"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                  data-slot="icon"
+                  class="w-6 h-6 text-zinc-500 dark:text-zinc-300"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z"
+                    clip-rule="evenodd"
+                  ></path></svg
+                ><input
+                  class="grow focus-visible:outline-none bg-transparent"
+                  placeholder="Search Accounts by Address or Domain"
+                  aria-label="Search Accounts by Address or Domain"
+                  id="global-search"
+                  value=""
+                />
+              </form>
+            </div>
+            <div class="">
+              <div class="flex flex-col items-center gap-8">
+                <div class="w-full px-4">
+                  <div class="flex flex-col gap-4 md:gap-4 max-w-3xl mx-auto">
+                    <h1>Take Back Control of Your Wallet.</h1>
+                    <div class="flex flex-col gap-4">
+                      <div>
+                        <p>
+                          When using dapps like Uniswap or OpenSea you have to
+                          grant them permission to spend your tokens and NFTs.
+                          This is called a token approval. If you don't revoke
+                          these approvals, the dapp can spend your tokens
+                          forever. Take back control by revoking your approvals.
+                        </p>
+                      </div>
+                      <video
+                        class="aspect-[1280/716] rounded-lg border border-black box-content"
+                        controls=""
+                        muted=""
+                        loop=""
+                        preload="metadata"
+                        playsinline=""
+                      >
+                        <source
+                          src="demo.mp4#t=0.001"
+                          type="video/mp4"
+                        /></video
+                      ><a
+                        class="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black dark:focus-visible:ring-white flex items-center border border-black dark:border-white duration-150 cursor-pointer disabled:cursor-not-allowed font-medium shrink-0 whitespace-nowrap bg-black text-white visited:text-white hover:bg-zinc-800 disabled:bg-zinc-600 justify-center h-12 px-6 text-lg rounded-xl mx-auto"
+                        href="https://revoke.cash/token-approval-checker/ethereum"
+                        >Get Started</a
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="w-full px-4 bg-black dark:bg-zinc-900 text-zinc-100 pt-8 pb-16"
+                >
+                  <div class="flex flex-col items-center">
+                    <h2 class="text-center">How To Revoke Your Approvals.</h2>
+                    <div>
+                      <div class="flex flex-col md:flex-row gap-4 pt-8">
+                        <div
+                          class="flex items-start gap-2 bg-white text-zinc-900 dark:bg-black dark:text-zinc-100 rounded-lg py-6 px-4 max-w-xs md:basis-96"
+                        >
+                          <div>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              aria-hidden="true"
+                              data-slot="icon"
+                              class="w-12 h-12"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"
+                              ></path>
+                            </svg>
+                          </div>
+                          <div>
+                            <h3 class="text-xl">1. Connect</h3>
+                            <p class="text-sm">
+                              Click
+                              <span class="font-bold">Connect Wallet</span> on
+                              the top right or enter an address in the search
+                              bar.
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          class="flex items-start gap-2 bg-white text-zinc-900 dark:bg-black dark:text-zinc-100 rounded-lg py-6 px-4 max-w-xs md:basis-96"
+                        >
+                          <div>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              aria-hidden="true"
+                              data-slot="icon"
+                              class="w-12 h-12"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                              ></path>
+                            </svg>
+                          </div>
+                          <div>
+                            <h3 class="text-xl">2. Inspect</h3>
+                            <p class="text-sm">
+                              Inspect your approvals by using the network
+                              selection, sorting and filtering options.
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          class="flex items-start gap-2 bg-white text-zinc-900 dark:bg-black dark:text-zinc-100 rounded-lg py-6 px-4 max-w-xs md:basis-96"
+                        >
+                          <div>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke-width="1.5"
+                              stroke="currentColor"
+                              aria-hidden="true"
+                              data-slot="icon"
+                              class="w-12 h-12"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                              ></path>
+                            </svg>
+                          </div>
+                          <div>
+                            <h3 class="text-xl">3. Revoke</h3>
+                            <p class="text-sm">
+                              Revoke the approvals that you no longer use to
+                              prevent unwanted access to your funds.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="w-full px-4">
+                  <div class="flex flex-col gap-4 md:gap-4 max-w-3xl mx-auto">
+                    <h2>Why You Should Use Revoke.cash.</h2>
+                    <div class="flex flex-col gap-4">
+                      <div>
+                        <h3 class="text-xl">
+                          1. Use Revoke.cash periodically.
+                        </h3>
+                        <p>
+                          It is always good to limit your approvals whenever you
+                          are not actively using a dapp, especially for NFT
+                          marketplaces. This reduces the risk of losing your
+                          funds to hacks or exploits and can also help mitigate
+                          the damage of phishing scams.
+                        </p>
+                      </div>
+                      <div>
+                        <h3 class="text-xl">
+                          2. Use Revoke.cash after getting scammed.
+                        </h3>
+                        <p>
+                          Very often, scammers try to trick you into granting
+                          them an approval to your funds. Sort your approvals by
+                          most recent to find out which approvals are to blame
+                          and revoke them to prevent further damage.
+                          Unfortunately it is not possible to
+                          <span class="italic">recover</span> funds that have
+                          already been stolen.
+                        </p>
+                      </div>
+                      <div>
+                        <h3 class="text-xl">
+                          3. Use the Revoke.cash browser extension.
+                        </h3>
+                        <p>
+                          Prevention is better than mitigation. The Revoke.cash
+                          browser extension warns you when you're about to sign
+                          something potentially harmful. This can save you from
+                          phishing scams by making you think twice about what
+                          you're doing.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="w-full px-4">
+                  <div class="flex flex-col gap-4 md:gap-4 max-w-3xl mx-auto">
+                    <h2>Frequently Asked Questions</h2>
+                    <div class="flex flex-col gap-4">
+                      <dl
+                        class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-x-6 md:gap-y-8"
+                      >
+                        <div class="flex flex-col gap-1">
+                          <dt>
+                            <h3 class="text-xl">
+                              Can I use Revoke.cash to recover stolen assets?
+                            </h3>
+                          </dt>
+                          <dd>
+                            <p>
+                              No. Revoke.cash is a
+                              <span class="italic">preventative</span> tool that
+                              helps you practice proper wallet hygiene. By
+                              regularly revoking active approvals you reduce the
+                              chances of becoming the victim of approval
+                              exploits. But unfortunately it cannot be used to
+                              recover any stolen funds. You should still make
+                              sure to revoke the approvals that were used to
+                              take your funds so that they cannot steal more in
+                              the future.
+                            </p>
+                          </dd>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                          <dt>
+                            <h3 class="text-xl">
+                              Can hardware wallets save me from approval
+                              exploits?
+                            </h3>
+                          </dt>
+                          <dd>
+                            <p>
+                              No. In general, hardware wallets are much safer
+                              than mobile or browser-based wallets because the
+                              wallet's keys are securely stored on the device,
+                              making it impossible to steal the keys without
+                              proper access to the device. But with approvals no
+                              one <span class="italic">needs</span> to steal
+                              your keys to take your tokens. And because of that
+                              hardware wallets offer no extra protection against
+                              approval exploits.
+                            </p>
+                          </dd>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                          <dt>
+                            <h3 class="text-xl">
+                              I want to revoke approvals, but when I add ETH to
+                              my account it gets stolen.
+                            </h3>
+                          </dt>
+                          <dd>
+                            <p>
+                              If you have a so-called "sweeper bot" on your
+                              account that steals any ETH as soon as it comes
+                              in, your seed phrase was compromised. This means
+                              that revoking approvals is not going to help with
+                              your wallet security. Unfortunately, there is no
+                              way for your wallet to recover from this. You
+                              should abandon this wallet and create a new one.
+                            </p>
+                          </dd>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                          <dt>
+                            <h3 class="text-xl">
+                              Is it enough to "disconnect" my wallet instead of
+                              revoking approvals?
+                            </h3>
+                          </dt>
+                          <dd>
+                            <p>
+                              No. Disconnecting your wallet (e.g. MetaMask) does
+                              not do <span class="italic">anything</span> to
+                              protect you from approval exploits - or most other
+                              exploits. The only thing that happens when
+                              disconnecting your wallet from a website is that
+                              that website cannot see your address anymore. But
+                              your approvals stay active.
+                            </p>
+                          </dd>
+                        </div>
+                      </dl>
+                      <div
+                        class="border w-full border-zinc-200 dark:border-zinc-800"
+                      ></div>
+                      <p class="text-zinc-700 dark:text-zinc-300">
+                        These are some of the most common questions we get
+                        asked. For a full list of FAQs please visit our
+                        <a
+                          class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded text-blue-700 visited:text-fuchsia-800 dark:text-blue-400 dark:visited:text-fuchsia-600 no-underline hover:underline decoration-brand font-medium"
+                          href="https://revoke.cash/learn/faq"
+                          >FAQ page</a
+                        >.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+          <div class="flex flex-col justify-end">
+            <footer
+              class="bg-black dark:bg-zinc-900 mt-24"
+              aria-labelledby="footer-heading"
+            >
+              <h2 id="footer-heading" class="sr-only">Footer</h2>
+              <div class="mx-auto max-w-7xl px-8">
+                <div class="my-16 grid grid-cols-2 gap-8 xl:col-span-2">
+                  <div class="md:grid md:grid-cols-2 md:gap-8">
+                    <div class="mt-8 flex flex-col gap-4">
+                      <h3 class="text-sm font-semibold leading-6 text-zinc-100">
+                        Product
+                      </h3>
+                      <ul role="list" class="space-y-2">
+                        <li class="list-none">
+                          <a
+                            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                            href="https://revoke.cash/token-approval-checker/ethereum"
+                            >Token Approval Checker</a
+                          >
+                        </li>
+                        <li class="list-none">
+                          <a
+                            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                            href="https://revoke.cash/extension"
+                            >Browser Extension</a
+                          >
+                        </li>
+                        <li class="list-none">
+                          <a
+                            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                            href="https://revoke.cash/exploits"
+                            >Exploit Checker</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="mt-8 flex flex-col gap-4">
+                      <h3 class="text-sm font-semibold leading-6 text-zinc-100">
+                        Learn
+                      </h3>
+                      <ul role="list" class="space-y-2">
+                        <li class="list-none">
+                          <a
+                            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                            href="https://revoke.cash/learn"
+                            >Knowledgebase</a
+                          >
+                        </li>
+                        <li class="list-none">
+                          <a
+                            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                            href="https://revoke.cash/learn/approvals/what-are-token-approvals"
+                            >What Are Token Approvals?</a
+                          >
+                        </li>
+                        <li class="list-none">
+                          <a
+                            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                            href="https://revoke.cash/learn/faq"
+                            >FAQ</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="md:grid md:grid-cols-2 md:gap-8">
+                    <div class="mt-8 flex flex-col gap-4">
+                      <h3 class="text-sm font-semibold leading-6 text-zinc-100">
+                        Company
+                      </h3>
+                      <ul role="list" class="space-y-2">
+                        <li class="list-none">
+                          <a
+                            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                            href="https://revoke.cash/blog"
+                            >Blog</a
+                          >
+                        </li>
+                        <li class="list-none">
+                          <a
+                            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                            href="https://revoke.cash/about"
+                            >About Us</a
+                          >
+                        </li>
+                        <li class="list-none">
+                          <a
+                            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                            href="https://github.com/RevokeCash/brand-assets"
+                            target="_blank"
+                            referrerpolicy="origin"
+                            >Brand Assets</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="mt-8 flex flex-col gap-4">
+                      <h3 class="text-sm font-semibold leading-6 text-zinc-100">
+                        Community
+                      </h3>
+                      <ul role="list" class="space-y-2">
+                        <li class="list-none">
+                          <a
+                            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                            href="https://twitter.com/RevokeCash"
+                            target="_blank"
+                            referrerpolicy="origin"
+                            >Twitter</a
+                          >
+                        </li>
+                        <li class="list-none">
+                          <a
+                            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                            href="https://discord.gg/revoke-cash"
+                            target="_blank"
+                            referrerpolicy="origin"
+                            >Discord</a
+                          >
+                        </li>
+                        <li class="list-none">
+                          <a
+                            class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                            href="https://github.com/RevokeCash/revoke.cash"
+                            target="_blank"
+                            referrerpolicy="origin"
+                            >GitHub</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="border w-full my-16 border-zinc-900 dark:border-zinc-800"
+                ></div>
+                <div
+                  class="my-16 flex flex-col md:flex-row items-center gap-4 justify-between"
+                >
+                  <div class="flex flex-col gap-px text-center md:text-left">
+                    <p class="leading-5 text-zinc-100 dark:text-zinc-100">
+                      © 2024 Revoke.cash
+                    </p>
+                    <ul
+                      class="flex justify-center md:justify-start items-center gap-1"
+                    >
+                      <li class="list-none">
+                        <a
+                          class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                          href="https://revoke.cash/privacy-policy"
+                          referrerpolicy="origin"
+                          >Privacy Policy</a
+                        >
+                      </li>
+                      <span
+                        class="text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                        >•</span
+                      >
+                      <li class="list-none">
+                        <a
+                          class="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:rounded no-underline hover:underline decoration-brand text-sm text-zinc-400 dark:text-zinc-400 visited:text-zinc-400"
+                          href="https://revoke.cash/terms"
+                          referrerpolicy="origin"
+                          >Terms</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="flex gap-2 shrink-0">
+                    <div class="w-32 css-b62m3t-container">
+                      <span
+                        id="react-select-language-select-live-region"
+                        class="css-7pg0cj-a11yText"
+                      ></span
+                      ><span
+                        aria-live="polite"
+                        aria-atomic="false"
+                        aria-relevant="additions text"
+                        role="log"
+                        class="css-7pg0cj-a11yText"
+                      ></span>
+                      <div
+                        class="flex items-center box-border h-9 px-2 css-10p3679-control"
+                      >
+                        <div class="css-15pp9oa">
+                          <div class="css-1re9cjr-singleValue">
+                            <div class="flex gap-1 items-center">
+                              <img
+                                alt="English"
+                                loading="lazy"
+                                width="16"
+                                height="16"
+                                decoding="async"
+                                data-nimg="1"
+                                class="aspect-square object-cover bg-white shrink-0 rounded-full border dark:border-white border-white"
+                                style="color: transparent"
+                                src="en.svg"
+                              />
+                              <div>English</div>
+                            </div>
+                          </div>
+                          <input
+                            id="react-select-language-select-input"
+                            tabindex="0"
+                            inputmode="none"
+                            aria-autocomplete="list"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            aria-label="Select Language"
+                            role="combobox"
+                            aria-activedescendant=""
+                            aria-readonly="true"
+                            class="css-1hac4vs-dummyInput"
+                            value=""
+                          />
+                        </div>
+                        <div class="css-10sck9p">
+                          <div
+                            class="css-9rpmj7-indicatorContainer"
+                            aria-hidden="true"
+                          >
+                            <svg
+                              height="20"
+                              width="20"
+                              viewBox="0 0 20 20"
+                              aria-hidden="true"
+                              focusable="false"
+                              class="css-8mmkcg"
+                            >
+                              <path
+                                d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                              ></path>
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="w-32 css-b62m3t-container">
+                      <span
+                        id="react-select-color-theme-select-live-region"
+                        class="css-7pg0cj-a11yText"
+                      ></span
+                      ><span
+                        aria-live="polite"
+                        aria-atomic="false"
+                        aria-relevant="additions text"
+                        role="log"
+                        class="css-7pg0cj-a11yText"
+                      ></span>
+                      <div
+                        class="flex items-center box-border h-9 px-2 css-10p3679-control"
+                      >
+                        <div class="css-15pp9oa">
+                          <div class="css-1re9cjr-singleValue">
+                            <div class="flex gap-1 items-center">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                aria-hidden="true"
+                                data-slot="icon"
+                                class="w-4 h-4 shrink-0"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"
+                                ></path>
+                              </svg>
+                              System
+                            </div>
+                          </div>
+                          <input
+                            id="react-select-color-theme-select-input"
+                            tabindex="0"
+                            inputmode="none"
+                            aria-autocomplete="list"
+                            aria-expanded="false"
+                            aria-haspopup="true"
+                            aria-label="Select Color Theme"
+                            role="combobox"
+                            aria-activedescendant=""
+                            aria-readonly="true"
+                            class="css-1hac4vs-dummyInput"
+                            value=""
+                          />
+                        </div>
+                        <div class="css-10sck9p">
+                          <div
+                            class="css-9rpmj7-indicatorContainer"
+                            aria-hidden="true"
+                          >
+                            <svg
+                              height="20"
+                              width="20"
+                              viewBox="0 0 20 20"
+                              aria-hidden="true"
+                              focusable="false"
+                              class="css-8mmkcg"
+                            >
+                              <path
+                                d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                              ></path>
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </footer>
+          </div>
+        </div>
+        <div class="Toastify"></div>
+        <style>
+          #nprogress {
+            pointer-events: none;
+          }
+          #nprogress .bar {
+            background: #fdb952;
+            position: fixed;
+            z-index: 1600;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+          }
+          #nprogress .peg {
+            display: block;
+            position: absolute;
+            right: 0;
+            width: 100px;
+            height: 100%;
+            opacity: 1;
+            -webkit-transform: rotate(3deg) translate(0px, -4px);
+            -ms-transform: rotate(3deg) translate(0px, -4px);
+            transform: rotate(3deg) translate(0px, -4px);
+          }
+          #nprogress .spinner {
+            display: block;
+            position: fixed;
+            z-index: 1600;
+            top: 15px;
+            right: 15px;
+          }
+          #nprogress .spinner-icon {
+            width: 18px;
+            height: 18px;
+            box-sizing: border-box;
+            border: 2px solid transparent;
+            border-top-color: #fdb952;
+            border-left-color: #fdb952;
+            border-radius: 50%;
+            -webkit-animation: nprogress-spinner 400ms linear infinite;
+            animation: nprogress-spinner 400ms linear infinite;
+          }
+          .nprogress-custom-parent {
+            overflow: hidden;
+            position: relative;
+          }
+          .nprogress-custom-parent #nprogress .bar,
+          .nprogress-custom-parent #nprogress .spinner {
+            position: absolute;
+          }
+          @-webkit-keyframes nprogress-spinner {
+            0% {
+              -webkit-transform: rotate(0deg);
+            }
+            100% {
+              -webkit-transform: rotate(360deg);
+            }
+          }
+          @keyframes nprogress-spinner {
+            0% {
+              transform: rotate(0deg);
+            }
+            100% {
+              transform: rotate(360deg);
+            }
+          }
+        </style>
+        <next-route-announcer
+          style="position: absolute"
+          data-scrapbook-shadowdom='<div aria-live="assertive" id="__next-route-announcer__" role="alert" style="position: absolute; border: 0px; height: 1px; margin: -1px; padding: 0px; width: 1px; clip: rect(0px, 0px, 0px, 0px); overflow: hidden; white-space: nowrap; overflow-wrap: normal;"></div>'
+        ></next-route-announcer
+        ><iframe
+          id="verify-api"
+          src="index_1.html"
+          style="display: none"
+        ></iframe
+        ><wcm-modal
+          data-scrapbook-adoptedstylesheets="0,1"
+          data-scrapbook-shadowdom='<!----><wcm-explorer-context data-scrapbook-shadowdom="<!---->"></wcm-explorer-context><wcm-theme-context data-scrapbook-shadowdom="<!---->"></wcm-theme-context><div id="wcm-modal" role="alertdialog" aria-modal="true" class=" wcm-overlay "><div class="wcm-container" tabindex="0"><!--?lit$16544013$--></div></div>'
+        ></wcm-modal>
+        <script data-scrapbook-elem="basic-loader">
+          (function () {
+            var k1 = "data-scrapbook-shadowdom",
+              k2 = "data-scrapbook-canvas",
+              k3 = "data-scrapbook-input-indeterminate",
+              k4 = "data-scrapbook-input-checked",
+              k5 = "data-scrapbook-option-selected",
+              k6 = "data-scrapbook-input-value",
+              k7 = "data-scrapbook-textarea-value",
+              k8 = "data-scrapbook-adoptedstylesheets",
+              k9 = /^data-scrapbook-adoptedstylesheet-(\d+)$/,
+              k10 = "data-scrapbook-shadowdom-mode",
+              k11 = "data-scrapbook-shadowdom-clonable",
+              k12 = "data-scrapbook-shadowdom-delegates-focus",
+              k13 = "data-scrapbook-shadowdom-serializable",
+              k14 = "data-scrapbook-shadowdom-slot-assignment",
+              k15 = "data-scrapbook-slot-assigned",
+              k16 = "data-scrapbook-slot-index",
+              k17 = /^scrapbook-slot-index=(\d+)$/;
+            k18 = "/scrapbook-slot-index";
+            (d = document),
+              (r = d.documentElement),
+              ($s = !!r.attachShadow),
+              ($as = !!d.adoptedStyleSheets),
+              ($c = !!window.HTMLCanvasElement),
+              ($sa = !!d.createElement("slot").assign),
+              (sle = []),
+              (sls = []),
+              (slt = function (r) {
+                if ($sa) {
+                  var E = r.childNodes,
+                    i,
+                    e,
+                    s,
+                    m;
+                  for (i = 0; i < E.length; i++) {
+                    e = E[i];
+                    if (e.nodeType === 8) {
+                      s = e.nodeValue;
+                      if ((m = s.match(k17))) {
+                        s = e.nextSibling;
+                        if (s.nodeType === 3) {
+                          sls[m[1]] = s;
+                        }
+                        r.removeChild(e);
+                        i--;
+                      } else if (s === k18) {
+                        r.removeChild(e);
+                        i--;
+                      }
+                    }
+                  }
+                }
+              }),
+              (sl = function () {
+                var i = sle.length,
+                  j,
+                  d,
+                  e;
+                while (i--) {
+                  d = sle[i];
+                  e = d.elem;
+                  d = d.value.split(",");
+                  j = d.length;
+                  while (j--) {
+                    d[j] = sls[parseInt(d[j], 10)];
+                  }
+                  try {
+                    e.assign.apply(e, d);
+                  } catch (ex) {
+                    console.error(ex);
+                  }
+                }
+              }),
+              (asl = (function (r) {
+                var l = [],
+                  E,
+                  i,
+                  e,
+                  m,
+                  c,
+                  j;
+                if ($as) {
+                  E = r.attributes;
+                  i = E.length;
+                  while (i--) {
+                    e = E[i];
+                    if (!(m = e.nodeName.match(k9))) {
+                      continue;
+                    }
+                    c = l[m[1]] = new CSSStyleSheet();
+                    r.removeAttribute(m[0]);
+                    m = e.nodeValue.split("\n\n");
+                    j = m.length;
+                    while (j--) {
+                      try {
+                        m[j] && c.insertRule(m[j]);
+                      } catch (ex) {
+                        console.error(ex);
+                      }
+                    }
+                  }
+                }
+                return l;
+              })(r)),
+              (as = function (d, e) {
+                var l, i, I;
+                if ($as && (l = e.getAttribute(k8)) !== null) {
+                  l = l.split(",");
+                  for (i = 0, I = l.length; i < I; i++) {
+                    d.adoptedStyleSheets.push(asl[l[i]]);
+                  }
+                  e.removeAttribute(k8);
+                }
+              }),
+              (fn = function (r) {
+                var E = r.querySelectorAll
+                    ? r.querySelectorAll("*")
+                    : r.getElementsByTagName("*"),
+                  i = E.length,
+                  e,
+                  d,
+                  s,
+                  m;
+                while (i--) {
+                  e = E[i];
+                  s = e.shadowRoot;
+                  if ($s && (d = e.getAttribute(k1))) {
+                    if (!s) {
+                      try {
+                        s = e.attachShadow({
+                          mode: (m = e.getAttribute(k10)) !== null ? m : "open",
+                          clonable: e.hasAttribute(k11),
+                          delegatesFocus: e.hasAttribute(k12),
+                          serializable: e.hasAttribute(k13),
+                          slotAssignment:
+                            (m = e.getAttribute(k14)) !== null ? m : void 0,
+                        });
+                        s.innerHTML = d;
+                      } catch (ex) {
+                        console.error(ex);
+                      }
+                    }
+                    e.removeAttribute(k1);
+                    e.removeAttribute(k10);
+                    e.removeAttribute(k11);
+                    e.removeAttribute(k12);
+                    e.removeAttribute(k13);
+                    e.removeAttribute(k14);
+                  }
+                  if ($c && (d = e.getAttribute(k2)) !== null) {
+                    (function () {
+                      var c = e,
+                        g = new Image();
+                      g.onload = function () {
+                        c.getContext("2d").drawImage(g, 0, 0);
+                      };
+                      g.src = d;
+                    })();
+                    e.removeAttribute(k2);
+                  }
+                  if ((d = e.getAttribute(k3)) !== null) {
+                    e.indeterminate = true;
+                    e.removeAttribute(k3);
+                  }
+                  if ((d = e.getAttribute(k4)) !== null) {
+                    e.checked = d === "true";
+                    e.removeAttribute(k4);
+                  }
+                  if ((d = e.getAttribute(k5)) !== null) {
+                    e.selected = d === "true";
+                    e.removeAttribute(k5);
+                  }
+                  if ((d = e.getAttribute(k6)) !== null) {
+                    e.value = d;
+                    e.removeAttribute(k6);
+                  }
+                  if ((d = e.getAttribute(k7)) !== null) {
+                    e.value = d;
+                    e.removeAttribute(k7);
+                  }
+                  if ($sa && (d = e.getAttribute(k15)) !== null) {
+                    sle.push({ elem: e, value: d });
+                    e.removeAttribute(k15);
+                  }
+                  if ($sa && (d = e.getAttribute(k16)) !== null) {
+                    sls[d] = e;
+                    e.removeAttribute(k16);
+                  }
+                  if (s) {
+                    slt(e);
+                    as(s, e);
+                    fn(s);
+                  }
+                }
+              });
+            as(d, r);
+            fn(d);
+            sl();
+          })();
+        </script>
+      </body>
+    </html>
+  </head>
+</html>
